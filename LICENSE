@@ -1,21 +1,20 @@
-MIT License
+import pygame as pg
 
-Copyright (c) 2023 JanN973
+y, step, head = segments = [15, 16, 17]
+n, apple = step, 99
+screen_fill = pg.display.set_mode([225] * 2, pg.SCALED).fill
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+while segments.count(head) % 2 * head % n * (head & 240):
+    if e := pg.event.get(768):
+        step = (e[0].key % 4 * 17 + 15) % 49 - n
+    segments = segments[apple != head:] + [head + step]
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+    screen_fill('black')
+    if apple == head:
+        apple = segments[0]
+    for i, v in enumerate([apple] + segments):
+        screen_fill('green' if i else 'red',
+                    ((v - 1) % n * y, (v - n) // n * y, y, y))
+    pg.display.flip()
+    head += step
+    pg.time.wait(100)
